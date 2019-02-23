@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "clusterName": {
+          "type": "string"
+      },
+      "location": {
+        "defaultValue": "eastus",
+        "type": "string"
+      },
+      "vmSize" : { 
+        "defaultValue": "Standard_A1_v2",
+        "type": "string"
+      },
+      "servicePrincipalId": {
+        "type": "string"
+      },
+      "servicePrincipalSecret" : { 
+        "type": "string"
+      },
+      "osType": {
+        "defaultValue": "Linux",
+        "type": "string"
+      },
+      "nodeCount": {
+        "defaultValue": 1,
+        "type": "int"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.ContainerService/managedClusters",
+          "name": "[parameters('clusterName')]",
+          "apiVersion": "2018-03-31",
+          "location": "[parameters('location')]",
+          "scale": null,
+          "properties": {
+              "kubernetesVersion": "1.12.4",
+              "dnsPrefix": "[parameters('clusterName')]",
+              "agentPoolProfiles": [
+                  {
+                      "name": "agentpool",
+                      "count": "[parameters('nodeCount')]",
+                      "vmSize": "[parameters('vmSize')]",
+                      "storageProfile": "ManagedDisks",
+                      "maxPods": 110,
+                      "osType": "[parameters('osType')]"
+                  }
+              ],
+              "servicePrincipalProfile": {
+                  "clientId": "[parameters('servicePrincipalId')]",
+                  "secret": "[parameters('servicePrincipalSecret')]"
+              },
+              "addonProfiles": {
+                  "httpapplicationrouting": {
+                      "enabled": true,
+                      "config": {
+                          "HTTPApplicationRoutingZoneName": "3a5359e909a940efb858.eastus.aksapp.io",
+                          "httpapplicationroutingzonename": "3a5359e909a940efb858.eastus.aksapp.io"
+                      }
+                  }
+              },
+              "enableRBAC": false,
+              "networkProfile": {
+                  "networkPlugin": "kubenet",
+                  "podCidr": "10.244.0.0/16",
+                  "serviceCidr": "10.0.0.0/16",
+                  "dnsServiceIP": "10.0.0.10",
+                  "dockerBridgeCidr": "172.17.0.1/16"
+              }
+          },
+          "dependsOn": []
+      }
+  ]
+}
