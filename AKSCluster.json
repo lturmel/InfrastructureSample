@@ -10,7 +10,7 @@
         "type": "string"
       },
       "vmSize" : { 
-        "defaultValue": "Standard_A1_v2",
+        "defaultValue": "Basic_A2",
         "type": "string"
       },
       "servicePrincipalId": {
@@ -26,6 +26,9 @@
       "nodeCount": {
         "defaultValue": 1,
         "type": "int"
+      },
+      "kubernetesVersion": {
+        "type":"string"
       }
   },
   "variables": {},
@@ -37,13 +40,15 @@
           "location": "[parameters('location')]",
           "scale": null,
           "properties": {
-              "kubernetesVersion": "1.12.4",
+              "kubernetesVersion": "[parameters('kubernetesVersion')]",
               "dnsPrefix": "[parameters('clusterName')]",
               "agentPoolProfiles": [
                   {
                       "name": "agentpool",
                       "count": "[parameters('nodeCount')]",
                       "vmSize": "[parameters('vmSize')]",
+                      "type": "AvailabilitySet",
+                      "orchestratorVersion": "[parameters('kubernetesVersion')]",
                       "storageProfile": "ManagedDisks",
                       "maxPods": 110,
                       "osType": "[parameters('osType')]"
