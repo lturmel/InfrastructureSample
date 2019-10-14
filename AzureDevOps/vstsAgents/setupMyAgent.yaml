@@ -1,0 +1,34 @@
+version: '3.1'
+services:
+  myAgent_01:
+    image: ${VSTS_AgentImage}
+    environment:
+      - VSTS_ACCOUNT=${VSTS_ACCOUNT}
+      - VSTS_TOKEN=${VSTS_TOKEN}
+      - VSTS_POOL=${VSTS_POOL}
+      - VSTS_AGENT=${VSTS_AGENT}_01
+      - DEVELOPER_NAME=${DEVELOPER_NAME}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1024M
+        reservations:
+          cpus: '0.15'
+          memory: 256M
+  myAgent_02:
+    image: ${VSTS_AgentImage}
+    environment:
+      - VSTS_ACCOUNT=${VSTS_ACCOUNT}
+      - VSTS_TOKEN=${VSTS_TOKEN}
+      - VSTS_POOL=${VSTS_POOL}
+      - VSTS_AGENT=${VSTS_AGENT}_02
+      - DEVELOPER_NAME=${DEVELOPER_NAME}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1024M
+        reservations:
+          cpus: '0.15'
+          memory: 256M
