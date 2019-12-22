@@ -8,6 +8,8 @@ services:
       - VSTS_POOL=${VSTS_POOL}
       - VSTS_AGENT=${VSTS_AGENT}_01
       - DEVELOPER_NAME=${DEVELOPER_NAME}
+    volumes:
+      - ./var/run/docker.sock:/var/run/docker.sock
     deploy:
       resources:
         limits:
@@ -24,6 +26,8 @@ services:
       - VSTS_POOL=${VSTS_POOL}
       - VSTS_AGENT=${VSTS_AGENT}_02
       - DEVELOPER_NAME=${DEVELOPER_NAME}
+    volumes:
+      - ./var/run/docker.sock:/var/run/docker.sock
     deploy:
       resources:
         limits:
